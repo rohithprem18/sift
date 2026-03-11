@@ -1,0 +1,20 @@
+server:
+  port: ${PORT:8080}
+
+serper:
+  api-key: ${SERPER_API_KEY:}
+  base-url: https://google.serper.dev
+  country: in
+  language: en
+
+spring:
+  application:
+    name: sift-search
+  cache:
+    cache-names: search
+    caffeine:
+      spec: maximumSize=500,expireAfterWrite=5m
+
+logging:
+  level:
+    dev.sift.search: info
