@@ -118,27 +118,37 @@ A search response always carries `query`, `type`, `page`, `tookMs`, `cached`, an
 
 ## Deployment
 
-**Docker** — one image, everything included:
+The Docker image bundles the built frontend into the backend's `static/`, so **one image is the whole app** — deploy it once, get one URL that serves both the UI and the API. No separate frontend host needed.
+
+### Render (recommended)
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/rohithprem18/sift)
+
+`render.yaml` at the repo root is a Render Blueprint — click the button, sign in, paste your `SERPER_API_KEY` when asked, and Render builds the `Dockerfile` and gives you a URL. Free tier sleeps after 15 minutes idle and wakes on the next request (~30s cold start).
+
+### Any other host
 
 ```bash
 docker build -t sift .
 docker run -p 8080:8080 -e SERPER_API_KEY=xxx sift
 ```
 
-`server.port` reads `$PORT`, so Render, Railway and Fly all bind correctly with no extra config.
+`server.port` reads `$PORT`, so Render, Railway, Fly, or a plain VPS all bind correctly with no extra config — just set `SERPER_API_KEY` on the host and point it at this `Dockerfile`.
 
-**Vercel** — the frontend deploys as a static build; `frontend/api/[...path].js` forwards `/api/*` to your backend (hosted separately, since Vercel doesn't run a persistent JVM). The Serper key still never touches Vercel.
+### Frontend on Vercel (optional)
 
-1. Deploy `backend/` (or the root `Dockerfile`) to Render/Railway/Fly and note its URL.
+Only worth doing if you specifically want the UI on Vercel's edge network separately from the backend. `frontend/api/[...path].js` forwards `/api/*` to a backend hosted elsewhere (Render, above) — Vercel never sees the Serper key.
+
+1. Deploy the backend (Render button above, or the `Dockerfile` anywhere else) and note its URL.
 2. Vercel → **New Project** → this repo → **Root Directory**: `frontend` (Vite preset auto-detected).
-3. Add one env var on the Vercel project: `BACKEND_URL` = your backend's URL.
+3. Add one env var on the Vercel project: `BACKEND_URL` = the backend's URL.
 
 ## Environment variables
 
 | Variable | Where | Required |
 |---|---|---|
-| `SERPER_API_KEY` | backend host (local, Docker, Render/Railway/Fly) | yes |
-| `BACKEND_URL` | Vercel project (frontend only) | only if deploying the frontend on Vercel |
+| `SERPER_API_KEY` | backend host (local, Docker, Render, or wherever the Dockerfile runs) | yes |
+| `BACKEND_URL` | Vercel project | only if deploying the frontend separately on Vercel |
 
 Copy `.env.example` to `.env` for local reference — Spring Boot reads `SERPER_API_KEY` from the process environment, not from the file directly; `scripts/dev.ps1` loads it for you.
 

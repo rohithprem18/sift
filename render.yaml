@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: sift
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    plan: free
+    healthCheckPath: /api/health
+    envVars:
+      - key: SERPER_API_KEY
+        sync: false
