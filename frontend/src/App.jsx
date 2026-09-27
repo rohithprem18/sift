@@ -238,6 +238,7 @@ export default function App() {
     return (
       <div className="app">
         <div className="idle-screen">
+          <span className="idle-eyebrow">Google, straight through</span>
           <h1 className="idle-wordmark">Sift</h1>
           <p className="idle-tagline">Type to search. Results arrive as you go.</p>
           <div className="idle-search">
