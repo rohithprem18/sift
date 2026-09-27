@@ -1,31 +1,39 @@
+import Favicon from './Favicon.jsx'
+import { breadcrumbOf, hostOf } from '../url.js'
+
 function ResultItem({ result }) {
+  const host = result.displayLink || hostOf(result.link)
+
   return (
-    <li className="result-item">
-      <span className="result-rank">{String(result.position).padStart(2, '0')}</span>
-      <div className="result-body">
-        {result.displayLink && <span className="result-domain">{result.displayLink}</span>}
-        <a
-          className="result-title"
-          href={result.link}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          {result.title}
-          {result.date && <span className="result-date"> — {result.date}</span>}
-        </a>
-        {result.snippet && <p className="result-snippet">{result.snippet}</p>}
-        {result.sitelinks?.length > 0 && (
-          <ul className="result-sitelinks">
-            {result.sitelinks.map((s, i) => (
-              <li key={i}>
-                <a href={s.link} target="_blank" rel="noopener noreferrer">
-                  {s.title}
-                </a>
-              </li>
-            ))}
-          </ul>
-        )}
+    <li className="result">
+      <div className="result-source">
+        <Favicon host={host} size={24} />
+        <p className="result-source-text">
+          <span className="result-host">{host}</span>
+          <span className="result-crumb">{breadcrumbOf(result.link)}</span>
+        </p>
+        <span className="result-rank">{String(result.position).padStart(2, '0')}</span>
       </div>
+      <a className="result-title" href={result.link} target="_blank" rel="noopener noreferrer">
+        {result.title}
+      </a>
+      {result.snippet && (
+        <p className="result-snippet">
+          {result.date && <span className="result-date">{result.date} — </span>}
+          {result.snippet}
+        </p>
+      )}
+      {result.sitelinks?.length > 0 && (
+        <ul className="sitelinks">
+          {result.sitelinks.map((s, i) => (
+            <li key={i}>
+              <a className="sitelink" href={s.link} target="_blank" rel="noopener noreferrer">
+                {s.title}
+              </a>
+            </li>
+          ))}
+        </ul>
+      )}
     </li>
   )
 }
@@ -33,10 +41,10 @@ function ResultItem({ result }) {
 export default function ResultList({ results }) {
   if (!results?.length) return null
   return (
-    <ul className="result-list">
-      {results.map((r) => (
-        <ResultItem key={`${r.position}-${r.link}`} result={r} />
+    <ol className="result-list">
+      {results.map((r, i) => (
+        <ResultItem key={`${r.position}-${r.link}-${i}`} result={r} />
       ))}
-    </ul>
+    </ol>
   )
 }

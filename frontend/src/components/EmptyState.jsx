@@ -1,13 +1,24 @@
+import Icon from './Icon.jsx'
+
 export default function EmptyState({ variant = 'empty', query, message, hint, onRetry }) {
-  const title = variant === 'error' ? message : `No results for "${query}".`
-  const subtext = variant === 'error' ? hint : 'Check the spelling, or try fewer words.'
+  const isError = variant === 'error'
 
   return (
-    <div className="state-block" role={variant === 'error' ? 'alert' : 'status'}>
-      <p className="state-title">{title}</p>
-      {subtext && <p className="state-hint">{subtext}</p>}
-      {variant === 'error' && (
-        <button type="button" className="state-retry" onClick={onRetry}>
+    <div className={`state-block${isError ? ' is-error' : ''}`} role={isError ? 'alert' : 'status'}>
+      <span className="state-icon">
+        <Icon name={isError ? 'alert' : 'search-off'} size={22} />
+      </span>
+      {isError ? (
+        <p className="state-title">{message}</p>
+      ) : (
+        <p className="state-title">
+          No results for <em>{query}</em>.
+        </p>
+      )}
+      <p className="state-hint">{isError ? hint : 'Check the spelling, or try fewer words.'}</p>
+      {isError && (
+        <button type="button" className="button-primary" onClick={onRetry}>
+          <Icon name="refresh" size={16} />
           Try again
         </button>
       )}
