@@ -241,7 +241,6 @@ export default function App() {
         <div className="topbar-inner">
           {isIdle ? (
             <div className="hero">
-              <span className="hero-eyebrow">Google, straight through</span>
               <h1 className="hero-title">
                 <Mark size={52} />
                 Sift
