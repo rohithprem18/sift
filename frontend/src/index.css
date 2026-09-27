@@ -295,29 +295,6 @@ input:focus-visible,
   gap: 18px;
 }
 
-.hero-eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 7px 14px;
-  border-radius: var(--r-pill);
-  background: rgba(255, 255, 255, .85);
-  box-shadow: var(--shadow-1);
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: .02em;
-  color: var(--brand-dark);
-}
-
-.hero-eyebrow::before {
-  content: '';
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--primary);
-  box-shadow: 0 0 0 3px var(--primary-tint-2);
-}
-
 .hero-title {
   display: inline-flex;
   align-items: center;
