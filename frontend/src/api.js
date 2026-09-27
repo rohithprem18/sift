@@ -27,5 +27,13 @@ export async function searchApi(q, type, page, signal) {
     throw new SearchApiError(message, hint, res.status)
   }
 
+  if (!body || typeof body !== 'object') {
+    throw new SearchApiError(
+      'Sift got an unreadable answer from the server.',
+      'Try that query again.',
+      res.status
+    )
+  }
+
   return body
 }

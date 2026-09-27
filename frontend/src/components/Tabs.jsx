@@ -1,8 +1,10 @@
+import Icon from './Icon.jsx'
+
 const TABS = [
-  { id: 'web', label: 'Web' },
-  { id: 'images', label: 'Images' },
-  { id: 'news', label: 'News' },
-  { id: 'videos', label: 'Videos' },
+  { id: 'web', label: 'All', icon: 'globe' },
+  { id: 'images', label: 'Images', icon: 'image' },
+  { id: 'news', label: 'News', icon: 'news' },
+  { id: 'videos', label: 'Videos', icon: 'video' },
 ]
 
 export default function Tabs({ active, onChange }) {
@@ -13,9 +15,10 @@ export default function Tabs({ active, onChange }) {
           key={t.id}
           type="button"
           className={`tab${active === t.id ? ' active' : ''}`}
-          aria-current={active === t.id ? 'true' : undefined}
+          aria-current={active === t.id ? 'page' : undefined}
           onClick={() => onChange(t.id)}
         >
+          <Icon name={t.icon} size={16} />
           {t.label}
         </button>
       ))}

@@ -1,21 +1,37 @@
+import { useState } from 'react'
+import Favicon from './Favicon.jsx'
+import { hostOf } from '../url.js'
+
+function NewsItem({ item }) {
+  const [thumbFailed, setThumbFailed] = useState(false)
+  const host = hostOf(item.link)
+
+  return (
+    <li className="news-item">
+      <div className="news-body">
+        <div className="news-meta">
+          <Favicon host={host} size={20} />
+          <span className="news-source">{item.source || host}</span>
+          {item.date && <span className="news-date">{item.date}</span>}
+        </div>
+        <a className="news-title" href={item.link} target="_blank" rel="noopener noreferrer">
+          {item.title}
+        </a>
+        {item.snippet && <p className="news-snippet">{item.snippet}</p>}
+      </div>
+      {item.imageUrl && !thumbFailed && (
+        <img className="news-thumb" src={item.imageUrl} alt="" loading="lazy" onError={() => setThumbFailed(true)} />
+      )}
+    </li>
+  )
+}
+
 export default function NewsList({ news }) {
   if (!news?.length) return null
   return (
     <ul className="news-list">
       {news.map((n, i) => (
-        <li key={`${n.link}-${i}`} className="news-item">
-          <div className="result-body">
-            <span className="news-meta">
-              {n.source && <span>{n.source}</span>}
-              {n.date && <span>{n.date}</span>}
-            </span>
-            <a className="news-title" href={n.link} target="_blank" rel="noopener noreferrer">
-              {n.title}
-            </a>
-            {n.snippet && <p className="news-snippet">{n.snippet}</p>}
-          </div>
-          {n.imageUrl && <img className="news-thumb" src={n.imageUrl} alt="" loading="lazy" />}
-        </li>
+        <NewsItem key={`${n.link}-${i}`} item={n} />
       ))}
     </ul>
   )
